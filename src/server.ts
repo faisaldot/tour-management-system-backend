@@ -1,7 +1,8 @@
 import dotenv from 'dotenv'
-dotenv.config()
 import mongoose from 'mongoose'
 import app from './app'
+
+dotenv.config()
 
 const PORT = process.env.PORT || 9001
 const MONGO_URI = process.env.MONGO_URI as string
@@ -11,7 +12,8 @@ async function connectDB() {
   try {
     await mongoose.connect(MONGO_URI)
     console.log(`Database connected successfully ✔`)
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`❌Failed to connect with database ): ${error}`)
   }
 }
@@ -23,11 +25,11 @@ async function startServer() {
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`)
     })
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Server failed to running... ): ${error}`)
   }
 }
-
 
 // Calling Server
 startServer()

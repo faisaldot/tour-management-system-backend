@@ -1,5 +1,5 @@
-import express from 'express'
 import cors from 'cors'
+import express from 'express'
 
 const app = express()
 
@@ -11,9 +11,8 @@ app.use(cors())
 // Health check route
 app.get('/health', (req, res) => {
   res.status(200).json({
-    message: "Ok"
+    message: 'Ok',
   })
 })
 
-
-export default app;
+export default app
