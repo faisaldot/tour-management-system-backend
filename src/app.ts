@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import globalErrorHandler from './middlewares/global-error-handler'
+import notFound from './middlewares/not-found'
 import router from './routes'
 
 const app = express()
@@ -22,5 +23,8 @@ app.get('/health', (req, res) => {
 
 // Error handler middleware
 app.use(globalErrorHandler)
+
+// Not found route
+app.use(notFound)
 
 export default app
