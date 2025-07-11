@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema<IUser>({
   picture: { type: String },
   address: { type: String },
   isDeleted: { type: Boolean, default: false },
-  isActive: { type: Boolean, enum: Object.values(IsActive), default: IsActive.ACTIVE },
+  isActive: { type: String, enum: Object.values(IsActive), default: IsActive.ACTIVE },
   isVerified: { type: Boolean, default: false },
   auths: [authProviderSchema],
 }, {
