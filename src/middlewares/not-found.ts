@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import httpStatusCode from 'http-status-codes'
 
 function notFound(req: Request, res: Response) {
