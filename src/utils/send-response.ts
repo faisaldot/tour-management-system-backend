@@ -11,7 +11,7 @@ export default function sendResponse<T>(
   statusCode: number,
   message: string,
   data: T,
-): any {
+): void {
   const responseData: ResponseData<T> = {
     success: true,
     message,
