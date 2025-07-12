@@ -1,8 +1,8 @@
-import type { AuthProvider, IUser } from './user.types'
+import type { IAuthProvider, IUser } from './user.types'
 import mongoose from 'mongoose'
 import { IsActive, Role } from './user.types'
 
-const authProviderSchema = new mongoose.Schema<AuthProvider>({
+const authProviderSchema = new mongoose.Schema<IAuthProvider>({
   provider: { type: String, required: true },
   providerId: { type: String, required: true },
 }, {

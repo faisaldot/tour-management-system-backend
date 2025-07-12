@@ -11,8 +11,8 @@ export enum IsActive {
   INACTIVE = 'INACTIVE',
 }
 
-export interface AuthProvider extends mongoose.Document {
-  provider: string
+export interface IAuthProvider {
+  provider: 'google' | 'credentials'
   providerId: string
 }
 
@@ -27,7 +27,7 @@ export interface IUser extends mongoose.Document {
   isDeleted?: boolean
   isVerified?: boolean
   isActive?: IsActive
-  auths: AuthProvider[]
+  auths: IAuthProvider[]
   booking: mongoose.Types.ObjectId[]
   guide: mongoose.Types.ObjectId[]
 }
