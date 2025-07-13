@@ -8,7 +8,7 @@ async function createUser({ email, password, ...rest }: Partial<IUser>) {
   // Checking if any user already exists
   const existingUser = await UserModel.findOne({ email })
   if (existingUser) {
-    throw new AppError(httpStatusCode.NOT_FOUND, 'User already exists!')
+    throw new AppError(httpStatusCode.BAD_REQUEST, 'User already exists!')
   }
 
   const authProvider: IAuthProvider = { provider: 'credentials', providerId: email! }
