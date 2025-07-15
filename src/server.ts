@@ -34,7 +34,7 @@ async function startServer() {
   }
 }
 
-(async function (){
+(async function () {
   await startServer()
   await seedSuperAdmin()
 }())
