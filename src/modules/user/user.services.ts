@@ -56,11 +56,6 @@ async function updateUser(userId: string, payload: Partial<IUser>, decodeToken: 
     payload.password = await bcrypt.hash(payload.password, Number(BCRYPT_SALT_ROUND))
   }
 
-  // Prevent email update
-  if (decodeToken.email && decodeToken.email !== user.email) {
-    throw new AppError(httpStatusCode.FORBIDDEN, 'Email can\'t be updated')
-  }
-
   // Update user
   const newUpdateUser = await UserModel.findByIdAndUpdate(userId, payload, { new: true, runValidators: true })
 

@@ -17,6 +17,7 @@ export default function checkAuth(...authRole: string[]) {
         throw new AppError(403, 'You don\'t have access to this route')
       }
 
+      req.user = verifiedToken
       next()
     }
     catch (error) {
