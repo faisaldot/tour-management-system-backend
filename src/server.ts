@@ -2,6 +2,7 @@ import type { Server } from 'node:http'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import app from './app'
+import seedSuperAdmin from './utils/seed-super-admin'
 
 dotenv.config()
 
@@ -33,8 +34,10 @@ async function startServer() {
   }
 }
 
-// Calling Server
-startServer()
+(async function (){
+  await startServer()
+  await seedSuperAdmin()
+}())
 
 // Shutting down server gracefully if any uncaught and unexpected error occurred.
 function shutdown(message: string, err?: unknown) {

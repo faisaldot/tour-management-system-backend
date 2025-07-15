@@ -16,11 +16,11 @@ export interface IAuthProvider {
   providerId: string
 }
 
-export interface IUser extends mongoose.Document {
+export interface IUser  {
   name: string
   email: string
   password?: string
-  role?: Role
+  role: Role
   phone?: string
   picture?: string
   address?: string
@@ -28,6 +28,6 @@ export interface IUser extends mongoose.Document {
   isVerified?: boolean
   isActive?: IsActive
   auths: IAuthProvider[]
-  booking: mongoose.Types.ObjectId[]
-  guide: mongoose.Types.ObjectId[]
+  booking?: mongoose.Types.ObjectId[]
+  guide?: mongoose.Types.ObjectId[]
 }
