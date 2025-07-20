@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import globalErrorHandler from './middlewares/global-error-handler'
@@ -9,6 +10,7 @@ const app = express()
 // App level middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use(cors())
 
 // Api routes

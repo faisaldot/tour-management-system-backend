@@ -2,8 +2,14 @@ import type { IUser } from '../user/user.types'
 import bcrypt from 'bcryptjs'
 import httpStatusCode from 'http-status-codes'
 import AppError from '../../errors/app-error'
+import { generateToken, verifyToken } from '../../utils/jwt'
 import { createUserTokens } from '../../utils/user-tokens'
 import { UserModel } from '../user/user.model'
+import { IsActive } from '../user/user.types'
+
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!
+const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!
+const JWT_ACCESS_EXPIRED = process.env.JWT_ACCESS_EXPIRED!
 
 async function credentialsLogin({ email, password }: Partial<IUser>) {
   // Checking user are exists or not
@@ -36,4 +42,30 @@ async function credentialsLogin({ email, password }: Partial<IUser>) {
   }
 }
 
-export const AuthService = { credentialsLogin }
+async function getNewAccessToken(refreshToken: string) {
+  const verifiedRefreshToken = verifyToken(refreshToken, JWT_REFRESH_SECRET)
+
+  const user = await UserModel.findOne({ email: verifiedRefreshToken.email })
+
+  if (!user) {
+    throw new AppError(404, 'User does\'t exists!')
+  }
+
+  if (user.isActive === IsActive.INACTIVE || user.isActive === IsActive.BLOCKED) {
+    throw new AppError(400, `User are ${user.isActive}`)
+  }
+
+  if (user.isDeleted) {
+    throw new AppError(400, 'User are deleted!')
+  }
+
+  const accessToken = generateToken(
+    { userId: user._id, email: user.email, role: user.role },
+    JWT_ACCESS_SECRET,
+    JWT_ACCESS_EXPIRED,
+  )
+
+  return { accessToken }
+}
+
+export const AuthService = { credentialsLogin, getNewAccessToken }
