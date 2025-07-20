@@ -2,6 +2,8 @@ import type { NextFunction, Request, Response } from 'express'
 import AppError from '../errors/app-error'
 import { verifyToken } from '../utils/jwt'
 
+const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!
+
 export default function checkAuth(...authRole: string[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -11,7 +13,7 @@ export default function checkAuth(...authRole: string[]) {
         throw new AppError(403, 'Invalid access token...')
       }
 
-      const verifiedToken = verifyToken(accessToken, 'secret')
+      const verifiedToken = verifyToken(accessToken, JWT_ACCESS_SECRET)
 
       if (!authRole.includes(verifiedToken.role)) {
         throw new AppError(403, 'You don\'t have access to this route')

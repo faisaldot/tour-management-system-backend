@@ -19,7 +19,7 @@ async function createUser({ email, password, ...rest }: Partial<IUser>) {
   const authProvider: IAuthProvider = { provider: 'credentials', providerId: email! }
 
   // Encrypting user password
-  const hashedPassword = await bcrypt.hash(password!, 10)
+  const hashedPassword = await bcrypt.hash(password!, Number(BCRYPT_SALT_ROUND))
 
   const user = await UserModel.create({ email, password: hashedPassword, auths: [authProvider], ...rest })
   return user
@@ -29,6 +29,7 @@ async function createUser({ email, password, ...rest }: Partial<IUser>) {
 async function updateUser(userId: string, payload: Partial<IUser>, decodeToken: jwt.JwtPayload) {
   // - Checking user are exist in the database
   const user = await UserModel.findById(userId)
+
   if (!user) {
     throw new AppError(httpStatusCode.NOT_FOUND, 'User not found!')
   }

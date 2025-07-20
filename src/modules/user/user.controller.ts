@@ -5,6 +5,7 @@ import catchAsync from '../../utils/catch-async'
 import sendResponse from '../../utils/send-response'
 import { UserService } from './user.services'
 
+// Create user controller
 const createUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const user = await UserService.createUser(req.body)
 
@@ -15,6 +16,7 @@ const createUser = catchAsync(async (req: Request, res: Response, next: NextFunc
   sendResponse(res, httpStatusCode.CREATED, 'User created successfully', user)
 })
 
+// Update user controller
 const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const userId = req.params.id
   const verifiedToken = req.user
@@ -25,6 +27,7 @@ const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunc
   sendResponse(res, httpStatusCode.OK, 'User updated successfully', user)
 })
 
+// Get all users controllers
 const getUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const users = await UserService.getUsers()
 
