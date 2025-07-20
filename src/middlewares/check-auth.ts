@@ -9,11 +9,7 @@ export default function checkAuth(...authRole: string[]) {
     try {
       const accessToken = req.headers.authorization
 
-      if (!accessToken) {
-        throw new AppError(403, 'Invalid access token...')
-      }
-
-      const verifiedToken = verifyToken(accessToken, JWT_ACCESS_SECRET)
+      const verifiedToken = verifyToken(accessToken!, JWT_ACCESS_SECRET)
 
       if (!authRole.includes(verifiedToken.role)) {
         throw new AppError(403, 'You don\'t have access to this route')

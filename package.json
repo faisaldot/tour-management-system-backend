@@ -9,8 +9,8 @@
   "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "node -r dotenv/config dist/server.js",
+    "dev": "ts-node-dev -r dotenv/config --respawn --transpile-only src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

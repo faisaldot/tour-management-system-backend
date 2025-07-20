@@ -1,8 +1,5 @@
 import type { IUser } from '../modules/user/user.types'
-import dotenv from 'dotenv'
 import { generateToken } from './jwt'
-
-dotenv.config()
 
 const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!
 const JWT_ACCESS_EXPIRED = process.env.JWT_ACCESS_EXPIRED!

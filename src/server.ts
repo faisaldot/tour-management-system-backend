@@ -1,10 +1,7 @@
 import type { Server } from 'node:http'
-import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import app from './app'
 import seedSuperAdmin from './utils/seed-super-admin'
-
-dotenv.config()
 
 const PORT = process.env.PORT || 9001
 const MONGO_URI = process.env.MONGO_URI as string
