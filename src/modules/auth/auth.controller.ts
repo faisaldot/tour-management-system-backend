@@ -4,6 +4,7 @@ import sendResponse from '../../utils/send-response'
 import setAuthCookie from '../../utils/set-cookie'
 import { AuthService } from './auth.services'
 
+// Credential login controller
 const credentialsLogin = catchAsync (
   async (req: Request, res: Response) => {
     const loginInfo = await AuthService.credentialsLogin(req.body)
@@ -14,6 +15,7 @@ const credentialsLogin = catchAsync (
   },
 )
 
+// Get new access token controller
 const getNewAccessToken = catchAsync(
   async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken
@@ -26,4 +28,35 @@ const getNewAccessToken = catchAsync(
   },
 )
 
-export const AuthController = { credentialsLogin, getNewAccessToken }
+// Logout controller
+const logout = catchAsync(
+  async (req: Request, res: Response) => {
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    })
+
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    })
+
+    sendResponse(res, 200, 'Logged out successful!', null)
+  },
+)
+
+// Reset-password controller
+const resetPassword = catchAsync(
+  async (req: Request, res: Response) => {
+    const decodeToken = req.user
+    const { oldPassword, newPassword } = req.body
+
+    await AuthService.resetPassword(oldPassword, newPassword, decodeToken)
+
+    sendResponse(res, 200, 'Password reset successfully!', null)
+  },
+)
+
+export const AuthController = { credentialsLogin, getNewAccessToken, logout, resetPassword }
