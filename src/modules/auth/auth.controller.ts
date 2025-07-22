@@ -1,8 +1,13 @@
 import type { Request, Response } from 'express'
+import type { JwtPayload } from 'jsonwebtoken'
+import AppError from '../../errors/app-error'
 import catchAsync from '../../utils/catch-async'
 import sendResponse from '../../utils/send-response'
 import setAuthCookie from '../../utils/set-cookie'
+import { createUserTokens } from '../../utils/user-tokens'
 import { AuthService } from './auth.services'
+
+const FRONTEND_URL = process.env.FRONTEND_URL!
 
 // Credential login controller
 const credentialsLogin = catchAsync (
@@ -53,10 +58,35 @@ const resetPassword = catchAsync(
     const decodeToken = req.user
     const { oldPassword, newPassword } = req.body
 
-    await AuthService.resetPassword(oldPassword, newPassword, decodeToken)
+    await AuthService.resetPassword(oldPassword, newPassword, decodeToken as JwtPayload)
 
     sendResponse(res, 200, 'Password reset successfully!', null)
   },
 )
 
-export const AuthController = { credentialsLogin, getNewAccessToken, logout, resetPassword }
+// Google callback controller
+const googleCallbackController = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user
+
+    let redirectTo = req.query.state ? req.query.state as string : ''
+
+    if (redirectTo.startsWith('/')) {
+      redirectTo = redirectTo.slice(1)
+    }
+
+    console.log('user', user)
+
+    if (!user) {
+      throw new AppError(404, 'User not found')
+    }
+
+    const tokenInfo = createUserTokens(user)
+
+    setAuthCookie(res, tokenInfo)
+
+    res.redirect(`${FRONTEND_URL}/${redirectTo}`)
+  },
+)
+
+export const AuthController = { credentialsLogin, getNewAccessToken, logout, resetPassword, googleCallbackController }
